@@ -57,20 +57,7 @@ jobs:
       CA_CLIENT_SECRET: ${{ secrets.CA_CLIENT_SECRET }}
 
     steps:    
-    
-    - uses: actions/checkout@v3
-    
-    - uses: actions/cache@v3
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    
-    - uses: actions/download-artifact@master
-      with:
-        name: artifacts
-    
+       
     - name: Deploy to Sandbox
       run: |
         artifactName=$(ls *.jar | head -1)

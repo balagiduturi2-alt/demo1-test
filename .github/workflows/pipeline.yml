@@ -49,15 +49,8 @@ jobs:
       with:
           name: artifacts
           path: target/*.jar
-          
-          
-    
-       
-    
- 
-        
+             
   deploy:
-    needs: upload
     runs-on: ubuntu-latest
     env:
       CA_CLIENT_ID: ${{ secrets.CA_CLIENT_ID }}

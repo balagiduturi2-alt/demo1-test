@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5935190c-b76f-4fe6-9338-43b51feaea7a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="pf-currency-conversion-flow" doc:id="82a9482f-ad72-435b-bfe6-d646d95cf150" >
+		<http:listener doc:name="Listener" doc:id="8a4f67e7-414c-42f2-a476-3841e69f6ada" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="LOG INFO System Start" doc:id="c352c81e-d54d-429a-bbad-9b652e5a53c3" message="Starting System API" />
+		<http:request doc:name="Request to Conversion" doc:id="b3d10950-7739-4598-883e-fad482bf78fa" url="${http.request.url}" config-ref="HTTP_Request_config">
+			<reconnect frequency="${reconnection.frequency}" count="${reconnection.attempts}"/>
+		</http:request>
+		<ee:transform doc:name="DW Final Payload" doc:id="4fecc458-a385-48e8-88a0-e7fdcc4ab20a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload
+
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="LOG INFO System End" doc:id="80ec7703-cf66-4918-a333-0e658741ec11" message="Finishing System API"/>
+	</flow>
+</mule>
